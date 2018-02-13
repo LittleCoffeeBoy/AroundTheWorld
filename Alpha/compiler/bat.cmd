@@ -1,0 +1,2 @@
+pawncc -h
+pause

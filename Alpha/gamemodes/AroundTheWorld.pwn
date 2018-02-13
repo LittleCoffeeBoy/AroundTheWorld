@@ -1,5 +1,6 @@
 /* --- Native Includes --- */
 #include <natives/a_samp>
+#include <natives/crashdetect>
 #include <natives/Pawn.CMD>
 #include <natives/sscanf2>
 #include <natives/bcrypt>

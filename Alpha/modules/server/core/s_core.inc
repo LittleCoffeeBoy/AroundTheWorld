@@ -1,8 +1,8 @@
-#include <server_core/database/p_database>
-#include <server_core/database/r_database>
-#include <server_core/3DTextLabels/3d_tlabels>
-#include <server_core/objects/s_objects>
-#include <server_core/vehicles/s_vehicle>
+#include <server/database/p_database>
+#include <server/database/s_database>
+#include <server/3DTextLabels/3d_tlabels>
+#include <server/objects/s_objects>
+#include <server/vehicles/s_vehicle>
 
 #define BCRYPT_COST (13)
 

@@ -1,11 +1,11 @@
-#include <player_core/colors/cp_dracula>
-#include <player_core/colors/cp_tomorrow>
-#include <player_core/characters/p_characters>
-#include <player_core/r_building/r_building>
-#include <player_core/p_information/p_information>
-#include <player_core/commands/normal/player_commands>
-#include <player_core/commands/administration/admin_commands>
-#include <server_core/routes/routes>
+#include <player/colors/cp_dracula>
+#include <player/colors/cp_tomorrow>
+#include <player/characters/p_characters>
+#include <player/r_building/r_building>
+#include <player/p_information/p_information>
+#include <player/commands/normal/player_commands>
+#include <player/commands/administration/admin_commands>
+#include <server/routes/routes>
 
 forward SMWD_SendClientMessage(playerid, hexColor, msg[]);
 forward DefineJoinCamera(playerid);

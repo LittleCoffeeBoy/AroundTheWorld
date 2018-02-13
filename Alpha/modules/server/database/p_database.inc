@@ -3,7 +3,7 @@ new DB:dbConnection;
 // DBP: OpenPlayerDatabase
 public OPDB_OnGameModeInit()
 {
-	if ((dbConnection = db_open("AroundTheWorld.db")) == DB:0)
+	if ((dbConnection = db_open("AWPlayers.db")) == DB:0)
 	{
 		print("[AW:Database] The connection with database falied.");
 	}

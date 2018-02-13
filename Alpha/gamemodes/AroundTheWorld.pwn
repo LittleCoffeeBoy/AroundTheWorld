@@ -15,8 +15,8 @@ enum(<<=1)
 flags:createroute(cmdOwner);
 */
 /* --------- Core Modules --------- */
-#include <server_core/core/s_core>
-#include <player_core/core/p_core>
+#include <server/core/s_core>
+#include <player/core/p_core>
 
 main()
 {
@@ -32,8 +32,8 @@ public OnGameModeInit()
 
 	// Hook (2)
 	// Opening the routes database.
-	#if defined ORDB_OnGameModeInit
-		ORDB_OnGameModeInit();
+	#if defined OSDB_OnGameModeInit
+		OSDB_OnGameModeInit();
 	#endif
 
 	// Hook (3)
@@ -86,7 +86,7 @@ public OnGameModeInit()
 //------------------------------
 
 //------------------------------
-// Hooking: ORDB_OnGameModeInit
+// Hooking: OSDB_OnGameModeInit
 // Hook: (2)
 #if defined _ALS_OnGameModeInit
 	#undef OnGameModeInit
@@ -94,10 +94,10 @@ public OnGameModeInit()
 	#define _ALS_OnGameModeInit
 #endif
 
-#define OnGameModeInit ORDB_OnGameModeInit
+#define OnGameModeInit OSDB_OnGameModeInit
 
-#if defined ORDB_OnGameModeInit
-	forward ORDB_OnGameModeInit();
+#if defined OSDB_OnGameModeInit
+	forward OSDB_OnGameModeInit();
 #endif
 //------------------------------
 
@@ -191,8 +191,8 @@ public OnGameModeExit()
 
 	// Hook (2)
 	// Closing the routes database.
-	#if defined CRDB_OnGameModeExit
-		CRDB_OnGameModeExit();
+	#if defined CSDB_OnGameModeExit
+		CSDB_OnGameModeExit();
 	#endif
 
 	return 1;
@@ -215,7 +215,7 @@ public OnGameModeExit()
 //------------------------------
 
 //------------------------------
-// Hooking: CRDB_OnGameModeExit
+// Hooking: CSDB_OnGameModeExit
 // Hook (2)
 #if defined _ALS_OnGameModeExit
 	#undef OnGameModeExit
@@ -223,10 +223,10 @@ public OnGameModeExit()
 	#define _ALS_OnGameModeExit
 #endif
 
-#define OnGameModeExit CRDB_OnGameModeExit
+#define OnGameModeExit CSDB_OnGameModeExit
 
-#if defined CRDB_OnGameModeExit
-	forward CRDB_OnGameModeExit();
+#if defined CSDB_OnGameModeExit
+	forward CSDB_OnGameModeExit();
 #endif
 //------------------------------
 

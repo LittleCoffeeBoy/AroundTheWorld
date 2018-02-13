@@ -64,19 +64,19 @@ public CreateRoute(playerid, truck, trailer, averageDeliveryTime[], companyName[
 	new dbQuery2[579];
 	format(dbQuery2, sizeof(dbQuery2), "INSERT INTO routes (rTruck, rTrailer, rAverageDeliveryTime, rCompanyName, rCompanyOwner, rWhatWillBeDelivered, rLoadValue, rLoadType, rFrom, rPosFromX, rPosFromY, rPosFromZ, rTo, rPosToX, rPosToY, rPosToZ, rRewardCash) VALUES (%i, %i, '%q', '%q', '%q', '%q', %i, %i, '%q', %f, %f, %f, '%q', %f, %f, %f, %i)",\
 	truck, trailer, averageDeliveryTime, companyName, companyOwner, whatWillBeDelivered, loadValue, loadType, from, posFromX, posFromY, posFromZ, to, posToX, posToY, posToZ, rewardCash);
-	db_query(rdbConnection, dbQuery2);
+	db_query(sdbConnection, dbQuery2);
 
 	SendClientMessage(playerid, HEX_TOMORROW_BLUE, "[Server » You] Route created successfuly.");
 
 	return 1;
 }
 
+/*
 public SearchRoutes()
 {
-	/*
 	new dbQuery[71], DBResult:dbResult;
 	format(dbQuery, sizeof(dbQuery), "SELECT * FROM routes WHERE rid = %i ORDER BY rRewardCash DESC LIMIT 10", player[playerid][pName]);
-	dbResult = db_query(rdbConnection, dbQuery);
+	dbResult = db_query(sdbConnection, dbQuery);
 
 	if (db_num_rows(dbResult) >= 1)
 	{
@@ -85,7 +85,8 @@ public SearchRoutes()
 
 		}
 	}
-	*/
+	
 	
 	return 1;
 }
+*/

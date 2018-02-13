@@ -18,6 +18,12 @@ flags:createroute(cmdOwner);
 #include <server/core/s_core>
 #include <player/core/p_core>
 
+#if defined MAX_PLAYERS
+	#undef MAX_PLAYERS
+#endif
+
+#define MAX_PLAYERS (5)
+
 main()
 {
 }
@@ -377,7 +383,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			new dbQuery[85];
 			format(dbQuery, sizeof(dbQuery), "INSERT INTO players (pName, acceptedRules) VALUES ('%q', %i)", player[playerid][pName], (player[playerid][acceptedRules] == true) ? 1 : 0);
-			db_query(dbConnection, dbQuery);
+			db_query(pdbConnection, dbQuery);
 
 			readingTimer[playerid] = 0;
 			readingTolerance[playerid] = 0;
@@ -458,7 +464,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			new dbQuery[89];
 			format(dbQuery, sizeof(dbQuery), "UPDATE players SET gender = '%s', genderColor = '%s' WHERE dbid = %i", player[playerid][gender], player[playerid][genderColor], player[playerid][dbid]);
-			db_query(dbConnection, dbQuery);
+			db_query(pdbConnection, dbQuery);
 
 			readingTolerance[playerid] = 0;
 
@@ -1056,6 +1062,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			CreateRoute(playerid, RouteBuffer[rTruck], RouteBuffer[rTrailer], RouteBuffer[rAverageDeliveryTime], "Around the World", "End", RouteBuffer[rWhatWillBeDelivered], RouteBuffer[rLoadValue], RouteBuffer[rLoadType], RouteBuffer[rFrom], RouteBuffer[rPosFromX], RouteBuffer[rPosFromY], RouteBuffer[rPosFromZ], RouteBuffer[rTo], RouteBuffer[rPosToX], RouteBuffer[rPosToY], RouteBuffer[rPosToZ], RouteBuffer[rRewardCash]);
 
+			return 1;
+		}
+
+		case routesDialog:
+		{
 			return 1;
 		}
 

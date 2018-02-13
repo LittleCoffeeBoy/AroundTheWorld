@@ -1,9 +1,9 @@
-new DB:dbConnection;
+new DB:pdbConnection;
 
 // DBP: OpenPlayerDatabase
 public OPDB_OnGameModeInit()
 {
-	if ((dbConnection = db_open("AWPlayers.db")) == DB:0)
+	if ((pdbConnection = db_open("AWPlayers.db")) == DB:0)
 	{
 		print("[AW:Database] The connection with database falied.");
 	}
@@ -11,8 +11,8 @@ public OPDB_OnGameModeInit()
 	{
 		print("[Database] The server is connected with the players database correctly.");
 
-		//db_query(dbConnection, "PRAGMA synchronous = OFF");
-		db_query(dbConnection, "CREATE TABLE IF NOT EXISTS players (dbid INTEGER PRIMARY KEY AUTOINCREMENT,\
+		//db_query(pdbConnection, "PRAGMA synchronous = OFF");
+		db_query(pdbConnection, "CREATE TABLE IF NOT EXISTS players (dbid INTEGER PRIMARY KEY AUTOINCREMENT,\
 		pName VARCHAR(25) COLLATE NOCASE,\
 		pass VARCHAR(61),\
 		acceptedRules INTEGER,\
@@ -30,7 +30,7 @@ public OPDB_OnGameModeInit()
 // CPDB: ClosePlayerDatabase
 public CPDB_OnGameModeExit()
 {
-	db_close(dbConnection);
+	db_close(pdbConnection);
 	
 	return 1;
 }

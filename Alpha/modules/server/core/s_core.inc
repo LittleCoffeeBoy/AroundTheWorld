@@ -29,6 +29,7 @@ enum
 	createRoute9, // Define the positions for the place of departure.
 	createRoute10, // Define the name of the delivery place.
 	createRoute11, // Define the positions for the delivery place.
+	routesDialog
 };
 
 enum
@@ -81,6 +82,29 @@ enum CreateRouteBuffer
 };
 
 new RouteBuffer[CreateRouteBuffer];
+
+enum RoutesInfo
+{
+	iTruck,
+	iTrailer,
+	iAverageDeliveryTime[37], // maybe remove 1 cell later (37 - 1 = 36)
+	iCompanyName[26],
+	iCompanyOwner[25],
+	iWhatWillBeDelivered[21],
+	iLoadValue,
+	iLoadType,
+	iFrom[31],
+	Float:iPosFromX,
+	Float:iPosFromY,
+	Float:iPosFromZ,
+	iTo[31],
+	Float:iPosToX,
+	Float:iPosToY,
+	Float:iPosToZ,
+	iRewardCash
+};
+
+new RoutesInformation[MAX_PLAYERS][10][RoutesInfo];
 
 // SetDO: SetDefaultOptions
 public SetDO_OnGameModeInit()

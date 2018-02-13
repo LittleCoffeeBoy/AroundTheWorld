@@ -43,7 +43,7 @@ public VPI_OnPlayerConnect(playerid)
 
 	new dbQuery[71], DBResult:dbResult;
 	format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
-	dbResult = db_query(dbConnection, dbQuery);
+	dbResult = db_query(pdbConnection, dbQuery);
 
 	// If the number of rows in the database is 1 (limit 1), so this player, at least has read the rules.
 	if (db_num_rows(dbResult) == 1)
@@ -109,12 +109,12 @@ public OnPassIsHashed(playerid)
 
 	new dbQuery[134];
 	format(dbQuery, sizeof(dbQuery), "UPDATE players SET pass = '%s' WHERE pName = '%q'", player[playerid][pass], player[playerid][pName]);
-	db_query(dbConnection, dbQuery);
+	db_query(pdbConnection, dbQuery);
 	
 	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Registration completed successfully.");
 
 	new DBResult:dbResult;
-	dbResult = db_query(dbConnection, "SELECT last_insert_rowid()");
+	dbResult = db_query(pdbConnection, "SELECT last_insert_rowid()");
 	
 	player[playerid][dbid] = db_get_field_int(dbResult);
 
@@ -145,7 +145,7 @@ public OnPassChecked(playerid)
 
 	new dbQuery[72], DBResult:dbResult;
 	format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE dbid = %i LIMIT 1", player[playerid][dbid]);
-	dbResult = db_query(dbConnection, dbQuery);
+	dbResult = db_query(pdbConnection, dbQuery);
 
 	if (db_num_rows(dbResult))
 	{

@@ -1058,3 +1058,47 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [13:22:27]  ===============================
 
 Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[12:03:28] 
+[12:03:28] Server Plugins
+[12:03:28] --------------
+[12:03:28]  Loading plugin: bcrypt-samp
+[12:03:28]   plugin.bcrypt v2.2.3 was loaded.
+[12:03:28]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[12:03:28]   Loaded.
+[12:03:28]  Loading plugin: fixes2
+[12:03:28] 
+
+[12:03:28]  ===============================
+
+[12:03:28]        fixes plugin loaded.     
+
+[12:03:28]    (c) 2012 Alex "Y_Less" Cole
+
+[12:03:28]  ===============================
+
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx
+Console input: gmx

@@ -3,6 +3,8 @@ forward CloseOpeningTDPanel(playerid);
 
 public ShowOpeningTDPanel(playerid)
 {
+	//hasTextdrawOpened[playerid] = true;
+
 	TextDrawShowForPlayer(playerid, tdBoxBackground);
 	TextDrawShowForPlayer(playerid, tdDesignPanel);
 	TextDrawShowForPlayer(playerid, tdBoxPanel);
@@ -28,6 +30,8 @@ public ShowOpeningTDPanel(playerid)
 
 public CloseOpeningTDPanel(playerid)
 {
+	//hasTextdrawOpened[playerid] = false;
+
 	TextDrawHideForPlayer(playerid, tdBoxBackground);
 	TextDrawHideForPlayer(playerid, tdDesignPanel);
 	TextDrawHideForPlayer(playerid, tdBoxPanel);

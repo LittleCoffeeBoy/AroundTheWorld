@@ -23,7 +23,7 @@ flags:createroute(cmdOwner);
 	#undef MAX_PLAYERS
 #endif
 
-#define MAX_PLAYERS (5)
+#define MAX_PLAYERS 5
 
 main()
 {
@@ -413,6 +413,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			//ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
 			
+			hasTextdrawOpened[playerid] = true;
 			ShowOpeningTDPanel(playerid);
 
 			return 1;
@@ -425,7 +426,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] It's okay, you can register your pass later.");
 				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] But remember, your name and agreement with the rules will be remembered and not reserved.");
 				//SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				
+				hasTextdrawOpened[playerid] = true;
 				ShowOpeningTDPanel(playerid);
+				
 				return 1;
 			}
 
@@ -496,7 +500,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			//CancelSelectTextDraw(playerid);
 			//ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+			
+			hasTextdrawOpened[playerid] = true;
 			ShowOpeningTDPanel(playerid);
+			
 
 			return 1;
 		}
@@ -507,7 +514,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				//SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] We hope to see you soon. Bye! =)");
 				//SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				
+				hasTextdrawOpened[playerid] = true;
 				ShowOpeningTDPanel(playerid);
+				
 				return 1;
 			}
 			
@@ -1148,6 +1158,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			//SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
 			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
 
+			hasTextdrawOpened[playerid] = false;
 			CloseOpeningTDPanel(playerid);
 
 			return 1;
@@ -1180,9 +1191,15 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 				}
 			}
 
-			SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
+			if (readingTolerance[playerid] == 0)
+			{
+				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
+				readingTolerance[playerid]++;
+			}
+			
 			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
 
+			hasTextdrawOpened[playerid] = false;
 			CloseOpeningTDPanel(playerid);
 
 			return 1;
@@ -1194,6 +1211,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 			SetTimerEx("KickThePlayer", 1000, false, "%i", playerid);
 
+			hasTextdrawOpened[playerid] = false;
 			CloseOpeningTDPanel(playerid);
 
 			return 1;
@@ -1201,6 +1219,16 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	}
 	else
 	{
+		if(hasTextdrawOpened[playerid])
+		{
+			SelectTextDraw(playerid, 0xf6f6f6ff);
+		}
+		else
+		{
+			CancelSelectTextDraw(playerid);
+		}
+
+		return 1;
 	}
 
 	return 0;

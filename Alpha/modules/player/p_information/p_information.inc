@@ -13,13 +13,14 @@ enum PlayerInfo {
 	bool:isChatLocked,
 	adminLevel,
 	staffTag[6],
-	money,
-	bool:isReadyToLogin
+	money
 };
 
 new player[MAX_PLAYERS][PlayerInfo];
 new readingTimer[MAX_PLAYERS];
 new readingTolerance[MAX_PLAYERS];
+new bool:isReadyToLogin[MAX_PLAYERS];
+new bool:hasTextdrawOpened[MAX_PLAYERS];
 
 
 // VPI: VerifyPlayerInformation
@@ -32,7 +33,7 @@ public VPI_OnPlayerConnect(playerid)
 	player[playerid] = tempInfo;
 
 	// Then, verify the information of the player connected.
-	player[playerid][isReadyToLogin] = false;
+	isReadyToLogin[playerid] = false;
 
 	readingTolerance[playerid] = 0;
 
@@ -48,6 +49,7 @@ public VPI_OnPlayerConnect(playerid)
 	// If the number of rows in the database is 1 (limit 1), so this player, at least has read the rules.
 	if (db_num_rows(dbResult) == 1)
 	{
+		hasTextdrawOpened[playerid] = true;
 		ShowOpeningTDPanel(playerid);
 	}
 	// Otherwise, if there is no rows with the name of the player, so this player is has no register in the database.
@@ -93,6 +95,7 @@ public SPI_OnPlayerDisconnect(playerid, reason)
 
 	readingTimer[playerid] = 0;
 	readingTolerance[playerid] = 0;
+	hasTextdrawOpened[playerid] = false;
 
 	return 1;
 }
@@ -114,6 +117,8 @@ public OnPassIsHashed(playerid)
 
 	db_free_result(dbResult);
 
+	readingTolerance[playerid] = 0;
+
 	ShowPlayerDialog(playerid, genderDialog, DIALOG_STYLE_LIST, ""TOMORROW_ORANGE"Select your gender.", ""DRACULA_PINK"Female\n"DRACULA_CYAN"Male\n"TOMORROW_WHITE"Other", "Select", "");
 
 	return 1;
@@ -121,9 +126,9 @@ public OnPassIsHashed(playerid)
 
 public OnPassChecked(playerid)
 {
-	player[playerid][isReadyToLogin] = bcrypt_is_equal();
+	isReadyToLogin[playerid] = bcrypt_is_equal();
 
-	if (!player[playerid][isReadyToLogin])
+	if (!isReadyToLogin[playerid])
 	{
 		if (readingTolerance[playerid] == 0)
 		{

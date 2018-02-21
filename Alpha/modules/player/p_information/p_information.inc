@@ -48,24 +48,7 @@ public VPI_OnPlayerConnect(playerid)
 	// If the number of rows in the database is 1 (limit 1), so this player, at least has read the rules.
 	if (db_num_rows(dbResult) == 1)
 	{
-		player[playerid][dbid] = db_get_field_assoc_int(dbResult, "dbid");
-		db_get_field_assoc(dbResult, "pass", player[playerid][pass], 61);
-		db_get_field_assoc(dbResult, "gender", player[playerid][gender], 7);
-
-		if (strlen(player[playerid][pass]) == 0)
-		{
-			ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
-			//SetTimerEx("ShowPlayerDialog", 100, false "iiissss", playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
-			return 1;
-		}
-
-		if (strlen(player[playerid][gender]) == 0)
-		{
-			ShowPlayerDialog(playerid, genderDialog, DIALOG_STYLE_LIST, ""TOMORROW_ORANGE"Select your gender.", ""DRACULA_PINK"Female\n"DRACULA_CYAN"Male\n"TOMORROW_WHITE"Other", "Select", "");
-			return 1;
-		}
-
-		ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+		ShowOpeningTDPanel(playerid);
 	}
 	// Otherwise, if there is no rows with the name of the player, so this player is has no register in the database.
 	else
@@ -89,6 +72,17 @@ public VPI_OnPlayerConnect(playerid)
 
 	return 1;
 }
+
+//------------------------------
+// Hooking Function: ShowOpeningTDPanel
+#if defined _ALS_TextDrawShowForPlayer
+	#undef TextDrawShowForPlayer
+#else
+	#define _ALS_TextDrawShowForPlayer
+#endif
+
+#define TextDrawShowForPlayer ShowOpeningTDPanel(playerid)
+//------------------------------
 
 // SPI: SavePlayerInformation
 public SPI_OnPlayerDisconnect(playerid, reason)

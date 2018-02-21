@@ -29,3 +29,6 @@
 # Executables
 *.exe
 *.out
+*.app
+Alpha/server_log.txt
+Alpha/server_log.txt

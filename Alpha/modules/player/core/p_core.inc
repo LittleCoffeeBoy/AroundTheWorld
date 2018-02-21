@@ -1,5 +1,6 @@
 #include <player/colors/cp_dracula>
 #include <player/colors/cp_tomorrow>
+#include <player/textdraws/p_textdraws>
 #include <player/characters/p_characters>
 #include <player/r_building/r_building>
 #include <player/p_information/p_information>

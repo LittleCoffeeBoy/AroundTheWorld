@@ -1504,3 +1504,228 @@ v0.3.7-R2, (C)2005-2015 SA-MP Team
 [17:47:20]  ===============================
 
 Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[13:37:28] 
+[13:37:28] Server Plugins
+[13:37:28] --------------
+[13:37:28]  Loading plugin: bcrypt-samp
+[13:37:29]   plugin.bcrypt v2.2.3 was loaded.
+[13:37:29]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[13:37:29]   Loaded.
+[13:37:29]  Loading plugin: fixes2
+[13:37:29] 
+
+[13:37:29]  ===============================
+
+[13:37:29]        fixes plugin loaded.     
+
+[13:37:29]    (c) 2012 Alex "Y_Less" Cole
+
+[13:37:29]  ===============================
+
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[13:42:55] 
+[13:42:55] Server Plugins
+[13:42:55] --------------
+[13:42:55]  Loading plugin: bcrypt-samp
+[13:42:55]   plugin.bcrypt v2.2.3 was loaded.
+[13:42:55]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[13:42:55]   Loaded.
+[13:42:55]  Loading plugin: fixes2
+[13:42:55] 
+
+[13:42:55]  ===============================
+
+[13:42:55]        fixes plugin loaded.     
+
+[13:42:55]    (c) 2012 Alex "Y_Less" Cole
+
+[13:42:55]  ===============================
+
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[13:43:33] 
+[13:43:33] Server Plugins
+[13:43:33] --------------
+[13:43:33]  Loading plugin: bcrypt-samp
+[13:43:33]   plugin.bcrypt v2.2.3 was loaded.
+[13:43:33]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[13:43:33]   Loaded.
+[13:43:33]  Loading plugin: fixes2
+[13:43:33] 
+
+[13:43:33]  ===============================
+
+[13:43:33]        fixes plugin loaded.     
+
+[13:43:33]    (c) 2012 Alex "Y_Less" Cole
+
+[13:43:33]  ===============================
+
+Console input: exit
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[13:59:34] 
+[13:59:34] Server Plugins
+[13:59:34] --------------
+[13:59:34]  Loading plugin: bcrypt-samp
+[13:59:34]   plugin.bcrypt v2.2.3 was loaded.
+[13:59:34]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[13:59:34]   Loaded.
+[13:59:34]  Loading plugin: fixes2
+[13:59:34] 
+
+[13:59:34]  ===============================
+
+[13:59:34]        fixes plugin loaded.     
+
+[13:59:34]    (c) 2012 Alex "Y_Less" Cole
+
+[13:59:34]  ===============================
+
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:02:10] 
+[14:02:10] Server Plugins
+[14:02:10] --------------
+[14:02:10]  Loading plugin: bcrypt-samp
+[14:02:10]   plugin.bcrypt v2.2.3 was loaded.
+[14:02:10]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[14:02:10]   Loaded.
+[14:02:10]  Loading plugin: fixes2
+[14:02:10] 
+
+[14:02:10]  ===============================
+
+[14:02:10]        fixes plugin loaded.     
+
+[14:02:10]    (c) 2012 Alex "Y_Less" Cole
+
+[14:02:10]  ===============================
+
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:13:39] 
+[14:13:39] Server Plugins
+[14:13:39] --------------
+[14:13:39]  Loading plugin: bcrypt-samp
+[14:13:39]   plugin.bcrypt v2.2.3 was loaded.
+[14:13:39]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[14:13:39]   Loaded.
+[14:13:39]  Loading plugin: fixes2
+[14:13:39] 
+
+[14:13:39]  ===============================
+
+[14:13:39]        fixes plugin loaded.     
+
+[14:13:39]    (c) 2012 Alex "Y_Less" Cole
+
+[14:13:39]  ===============================
+
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[14:17:29] 
+[14:17:29] Server Plugins
+[14:17:29] --------------
+[14:17:29]  Loading plugin: bcrypt-samp
+[14:17:29]   plugin.bcrypt v2.2.3 was loaded.
+[14:17:29]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[14:17:29]   Loaded.
+[14:17:29]  Loading plugin: fixes2
+[14:17:29] 
+
+[14:17:29]  ===============================
+
+[14:17:29]        fixes plugin loaded.     
+
+[14:17:29]    (c) 2012 Alex "Y_Less" Cole
+
+[14:17:29]  ===============================
+
+Console input: exit
+
+----------
+Loaded log file: "server_log.txt".
+----------
+
+SA-MP Dedicated Server
+----------------------
+v0.3.7-R2, (C)2005-2015 SA-MP Team
+
+[18:01:47] 
+[18:01:47] Server Plugins
+[18:01:47] --------------
+[18:01:47]  Loading plugin: bcrypt-samp
+[18:01:47]   plugin.bcrypt v2.2.3 was loaded.
+[18:01:47]   plugin.bcrypt: 4 cores detected, 3 threads will be used.
+[18:01:47]   Loaded.
+[18:01:47]  Loading plugin: fixes2
+[18:01:47] 
+
+[18:01:47]  ===============================
+
+[18:01:47]        fixes plugin loaded.     
+
+[18:01:47]    (c) 2012 Alex "Y_Less" Cole
+
+[18:01:47]  ===============================
+
+Console input: gmx
+Console input: gmx

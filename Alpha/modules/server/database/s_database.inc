@@ -1,4 +1,5 @@
 new DB:sdbConnection;
+new nBuildnumber;
 
 // OSDB: Open server database.
 public OSDB_OnGameModeInit()
@@ -34,7 +35,7 @@ public OSDB_OnGameModeInit()
 
 //		INSERT INTO players (pName, acceptedRules) VALUES ('%q', %i)
 
-		new dbQuery[99], DBResult:dbResult, nBuildnumber;
+		new dbQuery[99], DBResult:dbResult;
 
 		format(dbQuery, sizeof(dbQuery), "SELECT * FROM sversion WHERE vid = %i", 1);
 		dbResult = db_query(sdbConnection, dbQuery);

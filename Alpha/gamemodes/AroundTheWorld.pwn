@@ -73,6 +73,12 @@ public OnGameModeInit()
 		Add3DL_OnGameModeInit();
 	#endif
 
+	// Hook (8)
+	// Setting up the login panel.
+	#if defined SetOTD_OnGameModeInit
+		SetOTD_OnGameModeInit();
+	#endif
+
 	return 1;
 }
 
@@ -185,6 +191,22 @@ public OnGameModeInit()
 
 #if defined Add3DL_OnGameModeInit
 	forward Add3DL_OnGameModeInit();
+#endif
+//------------------------------
+
+//------------------------------
+// Hooking: SetOTD_OnGameModeInit
+// Hook (8)
+#if defined _ALS_OnGameModeInit
+	#undef OnGameModeInit
+#else
+	#define _ALS_OnGameModeInit
+#endif
+
+#define OnGameModeInit SetOTD_OnGameModeInit
+
+#if defined SetOTD_OnGameModeInit
+	forward SetOTD_OnGameModeInit();
 #endif
 //------------------------------
 
@@ -389,8 +411,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			readingTimer[playerid] = 0;
 			readingTolerance[playerid] = 0;
 
-			ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+			//ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
 			
+			ShowOpeningTDPanel(playerid);
+
 			return 1;
 		}
 
@@ -400,7 +424,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			{
 				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] It's okay, you can register your pass later.");
 				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] But remember, your name and agreement with the rules will be remembered and not reserved.");
-				SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				//SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				ShowOpeningTDPanel(playerid);
 				return 1;
 			}
 
@@ -469,7 +494,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			readingTolerance[playerid] = 0;
 
-			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+			//CancelSelectTextDraw(playerid);
+			//ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+			ShowOpeningTDPanel(playerid);
 
 			return 1;
 		}
@@ -478,11 +505,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if (!response)
 			{
-				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] We hope to see you soon. Bye! =)");
-				SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				//SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] We hope to see you soon. Bye! =)");
+				//SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
+				ShowOpeningTDPanel(playerid);
 				return 1;
 			}
-
+			
+			//CancelSelectTextDraw(playerid);
 			bcrypt_check(inputtext, player[playerid][pass], "OnPassChecked", "i", playerid);
 
 			return 1;
@@ -1083,4 +1112,96 @@ public OnPlayerSpawn(playerid)
 	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Chat enabled.");
 	
 	return 1;
+}
+
+public OnPlayerClickTextDraw(playerid, Text:clickedid)
+{
+	if (_:clickedid != INVALID_TEXT_DRAW)
+	{
+		if(clickedid == tdBtnLogin)
+		{
+			new dbQuery[71], DBResult:dbResult;
+			format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
+			dbResult = db_query(pdbConnection, dbQuery);
+
+			if (db_num_rows(dbResult) == 1)
+			{
+				player[playerid][dbid] = db_get_field_assoc_int(dbResult, "dbid");
+				db_get_field_assoc(dbResult, "pass", player[playerid][pass], 61);
+				db_get_field_assoc(dbResult, "gender", player[playerid][gender], 7);
+
+				if (strlen(player[playerid][pass]) == 0)
+				{
+					ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+					//SetTimerEx("ShowPlayerDialog", 100, false "iiissss", playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+					return 1;
+				}
+
+				if (strlen(player[playerid][gender]) == 0)
+				{
+					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] This account already have a password registered, please, select your gender.");
+					ShowPlayerDialog(playerid, genderDialog, DIALOG_STYLE_LIST, ""TOMORROW_ORANGE"Select your gender.", ""DRACULA_PINK"Female\n"DRACULA_CYAN"Male\n"TOMORROW_WHITE"Other", "Select", "");
+					return 1;
+				}
+			}
+
+			//SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
+			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+
+			CloseOpeningTDPanel(playerid);
+
+			return 1;
+		}
+
+		if(clickedid == tdBtnRegister)
+		{
+			new dbQuery[71], DBResult:dbResult;
+			format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
+			dbResult = db_query(pdbConnection, dbQuery);
+
+			if (db_num_rows(dbResult) == 1)
+			{
+				player[playerid][dbid] = db_get_field_assoc_int(dbResult, "dbid");
+				db_get_field_assoc(dbResult, "pass", player[playerid][pass], 61);
+				db_get_field_assoc(dbResult, "gender", player[playerid][gender], 7);
+
+				if (strlen(player[playerid][pass]) == 0)
+				{
+					ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+					//SetTimerEx("ShowPlayerDialog", 100, false "iiissss", playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+					return 1;
+				}
+
+				if (strlen(player[playerid][gender]) == 0)
+				{
+					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] This account already have a password registered, please, select your gender.");
+					ShowPlayerDialog(playerid, genderDialog, DIALOG_STYLE_LIST, ""TOMORROW_ORANGE"Select your gender.", ""DRACULA_PINK"Female\n"DRACULA_CYAN"Male\n"TOMORROW_WHITE"Other", "Select", "");
+					return 1;
+				}
+			}
+
+			SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
+			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+
+			CloseOpeningTDPanel(playerid);
+
+			return 1;
+		}
+
+		if(clickedid == tdBtnExit)
+		{
+			SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] Bye! :)");
+
+			SetTimerEx("KickThePlayer", 1000, false, "%i", playerid);
+
+			CloseOpeningTDPanel(playerid);
+
+			return 1;
+		}
+	}
+	else
+	{
+	}
+
+	return 0;
 }

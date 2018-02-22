@@ -423,8 +423,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if (!response)
 			{
-				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] It's okay, you can register your pass later.");
-				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] But remember, your name and agreement with the rules will be remembered and not reserved.");
+				if (readingTolerance[playerid] == 0)
+				{
+					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] It's okay, you can register your pass later.");
+					SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] But remember, your name and agreement with the rules will be remembered and not reserved.");
+
+					readingTolerance[playerid]++;
+				}
+
 				//SetTimerEx("KickThePlayer", 1000, false, "i", playerid);
 				
 				hasTextdrawOpened[playerid] = true;
@@ -435,13 +441,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			if ((strlen(inputtext) < 6) || strlen(inputtext) > 25)
 			{
-				if (readingTolerance[playerid] == 0)
+				if (readingTolerance[playerid] <= 1)
 				{
 					SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] The pass length should be between 6 and 25 characters.");
 					readingTolerance[playerid]++;
 				}
 
 				ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
+				
 				return 1;
 			}
 
@@ -488,7 +495,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(player[playerid][gender], 7, "Other");
 					format(player[playerid][genderColor], 9, (randNumber == 1) ? DRACULA_CYAN : DRACULA_PINK);
 
-					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "As you're of other gender, you can change only one time your color via cmd: \"/changecolor\" or \"/changenamecolor <pink/blue>\".");
+					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "As you're of other gender, you can change only one time your name color via cmd: \"/changenamecolor\" or \"/changenamecolor <pink/blue>\".");
 				}
 			}
 
@@ -499,10 +506,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			readingTolerance[playerid] = 0;
 
 			//CancelSelectTextDraw(playerid);
-			//ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
+			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
 			
-			hasTextdrawOpened[playerid] = true;
-			ShowOpeningTDPanel(playerid);
+			//hasTextdrawOpened[playerid] = true;
+			//ShowOpeningTDPanel(playerid);
 			
 
 			return 1;
@@ -1130,6 +1137,9 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	{
 		if(clickedid == tdBtnLogin)
 		{
+			hasTextdrawOpened[playerid] = false;
+			CloseOpeningTDPanel(playerid);
+
 			new dbQuery[71], DBResult:dbResult;
 			format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
 			dbResult = db_query(pdbConnection, dbQuery);
@@ -1158,14 +1168,14 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			//SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
 			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
 
-			hasTextdrawOpened[playerid] = false;
-			CloseOpeningTDPanel(playerid);
-
 			return 1;
 		}
 
 		if(clickedid == tdBtnRegister)
 		{
+			hasTextdrawOpened[playerid] = false;
+			CloseOpeningTDPanel(playerid);
+
 			new dbQuery[71], DBResult:dbResult;
 			format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
 			dbResult = db_query(pdbConnection, dbQuery);
@@ -1199,20 +1209,17 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			
 			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
 
-			hasTextdrawOpened[playerid] = false;
-			CloseOpeningTDPanel(playerid);
-
 			return 1;
 		}
 
 		if(clickedid == tdBtnExit)
 		{
+			hasTextdrawOpened[playerid] = false;
+			CloseOpeningTDPanel(playerid);
+
 			SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] Bye! :)");
 
 			SetTimerEx("KickThePlayer", 1000, false, "%i", playerid);
-
-			hasTextdrawOpened[playerid] = false;
-			CloseOpeningTDPanel(playerid);
 
 			return 1;
 		}

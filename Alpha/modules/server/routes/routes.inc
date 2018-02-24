@@ -117,9 +117,9 @@ public SearchRoutes(playerid)
 
 	db_free_result(dbResult);
 
-	new strRoutes[1076], strHeaderRoutesFormat[26], strRoutesFormat[105];
+	new strRoutes[1076], strHeaderRoutesFormat[91], strRoutesFormat[151];
 
-	format(strHeaderRoutesFormat, sizeof(strHeaderRoutesFormat), "Truck\t From\t To\t Reward");
+	format(strHeaderRoutesFormat, sizeof(strHeaderRoutesFormat), ""TOMORROW_WHITE"Truck\t "TOMORROW_GRAY"From\t "TOMORROW_GRAY"To\t "TOMORROW_GREEN"Reward");
 	strins(strRoutes, strHeaderRoutesFormat, 0);
 
 	new j = 0;
@@ -129,7 +129,7 @@ public SearchRoutes(playerid)
 		new routeTruck[13];
 		format(routeTruck, 13, "%s", GetTruckName(RoutesInformation[playerid][j][iTruck]));
 
-		format(strRoutesFormat, sizeof(strRoutesFormat), "\n%s\t %s\t %s\t $%i\n", routeTruck, RoutesInformation[playerid][j][iFrom], RoutesInformation[playerid][j][iTo], RoutesInformation[playerid][j][iRewardCash]);
+		format(strRoutesFormat, sizeof(strRoutesFormat), "\n%s%s\t %s%s\t %s%s\t %s$%i\n", TOMORROW_WHITE, routeTruck, TOMORROW_GRAY, RoutesInformation[playerid][j][iFrom], TOMORROW_GRAY, RoutesInformation[playerid][j][iTo], TOMORROW_GREEN, RoutesInformation[playerid][j][iRewardCash]);
 		strins(strRoutes, strRoutesFormat, strlen(strRoutes));
 		
 		j++;
@@ -138,7 +138,7 @@ public SearchRoutes(playerid)
 
 	//printf("Quantidade de rotas adicionandas para o jogador %s: %i", player[playerid][pName], j-1);
 	
-	ShowPlayerDialog(playerid, routesDialog, DIALOG_STYLE_TABLIST_HEADERS, "Server Routes", strRoutes, "Select", "Cancel");
+	ShowPlayerDialog(playerid, routesDialog, DIALOG_STYLE_TABLIST_HEADERS, ""TOMORROW_GREEN"Server Routes", strRoutes, "Select", "Cancel");
 
 	return 1;
 }

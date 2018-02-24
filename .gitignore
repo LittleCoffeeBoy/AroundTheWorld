@@ -34,3 +34,6 @@
 
 # Log
 *.txt
+
+# Databases
+*.db

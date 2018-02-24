@@ -143,11 +143,12 @@ public OnPassChecked(playerid)
 	readingTolerance[playerid] = 0;
 
 	new dbQuery[72], DBResult:dbResult;
-	format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE dbid = %i LIMIT 1", player[playerid][dbid]);
+	format(dbQuery, sizeof(dbQuery), "SELECT * FROM players WHERE pName = '%q' LIMIT 1", player[playerid][pName]);
 	dbResult = db_query(pdbConnection, dbQuery);
 
 	if (db_num_rows(dbResult))
 	{
+		player[playerid][dbid] = db_get_field_assoc_int(dbResult, "dbid");
 		new acceptedRulesCache = db_get_field_assoc_int(dbResult, "acceptedRules");
 		player[playerid][acceptedRules] = (acceptedRulesCache == 1) ? true : false;
 		db_get_field_assoc(dbResult, "gender", player[playerid][gender], 7);
@@ -162,7 +163,7 @@ public OnPassChecked(playerid)
 
 	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Logged in successfully.");
 
-	if(!strcmp(player[playerid][genderColor], DRACULA_PINK, true))
+	if(!strcmp(player[playerid][genderColor], DRACULA_PINK))
 	{
 		SetPlayerColor(playerid, HEX_DRACULA_PINK);
 	}

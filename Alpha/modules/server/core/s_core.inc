@@ -17,6 +17,7 @@ enum
 	registerDialog,
 	genderDialog,
 	loginDialog,
+	exitBtnDialog,
 	createRoute0, // CMD: createroute
 	createRoute1, // Define a truck for the deliver.
 	createRoute2, // Check if the truck needs a trailer, if it needs, define it. If it's not, just proceed.

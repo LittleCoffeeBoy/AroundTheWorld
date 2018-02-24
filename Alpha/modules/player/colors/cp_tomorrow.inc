@@ -1,5 +1,6 @@
 /* ---------- Tomorrow Palette ---------- */
 // Tomorrow Night
+/*
 #define TOMORROW_BLACK "{1d1f21}"
 #define TOMORROW_WHITE "{c5c8c6}"
 #define TOMORROW_GRAY "{969896}"
@@ -21,9 +22,9 @@
 #define HEX_TOMORROW_AQUA (0x8abeb7ff)
 #define HEX_TOMORROW_BLUE (0x81a2beff)
 #define HEX_TOMORROW_PURPLE (0xb294bbff)
+*/
 
 // Tomorrow Night
-/*
 #define TOMORROW_BLACK "{4d4d4c}"
 #define TOMORROW_WHITE "{efefef}"
 #define TOMORROW_GRAY "{8e908c}"
@@ -34,17 +35,14 @@
 #define TOMORROW_AQUA "{3e999f}"
 #define TOMORROW_BLUE "{4271ae}"
 #define TOMORROW_PURPLE "{8959a8}"
-*/
 
-/*
-#define HEX_TOMORROW_BLACK (0x4d4d4cff)
-#define HEX_TOMORROW_WHITE (0xefefefff)
-#define HEX_TOMORROW_GRAY (0x8e908cff)
-#define HEX_TOMORROW_RED (0xc82829ff)
-#define HEX_TOMORROW_ORANGE (0xf5871fff)
-#define HEX_TOMORROW_YELLOW (0xeab700ff)
-#define HEX_TOMORROW_GREEN (0x718c00ff)
-#define HEX_TOMORROW_AQUA (0x3e999fff)
-#define HEX_TOMORROW_BLUE (0x4271aeff)
-#define HEX_TOMORROW_PURPLE (0x8959a8ff)
-*/
+#define HEX_TOMORROW_BLACK 0x4d4d4cff
+#define HEX_TOMORROW_WHITE 0xefefefff
+#define HEX_TOMORROW_GRAY 0x8e908cff
+#define HEX_TOMORROW_RED 0xc82829ff
+#define HEX_TOMORROW_ORANGE 0xf5871fff
+#define HEX_TOMORROW_YELLOW 0xeab700ff
+#define HEX_TOMORROW_GREEN 0x718c00ff
+#define HEX_TOMORROW_AQUA 0x3e999fff
+#define HEX_TOMORROW_BLUE 0x4271aeff
+#define HEX_TOMORROW_PURPLE 0x8959a8ff

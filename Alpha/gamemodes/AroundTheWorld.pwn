@@ -495,7 +495,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(player[playerid][gender], 7, "Other");
 					format(player[playerid][genderColor], 9, (randNumber == 1) ? DRACULA_CYAN : DRACULA_PINK);
 
-					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "As you're of other gender, you can change only one time your name color via cmd: \"/changenamecolor\" or \"/changenamecolor <pink/blue>\".");
+					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] As you're of other gender, you can change only one time your name color via cmd: \"/changecolor <pink/blue>\".");
 				}
 			}
 
@@ -527,9 +527,32 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				
 				return 1;
 			}
+
+			readingTolerance[playerid] = 0;
 			
 			//CancelSelectTextDraw(playerid);
 			bcrypt_check(inputtext, player[playerid][pass], "OnPassChecked", "i", playerid);
+
+			return 1;
+		}
+
+		case exitBtnDialog:
+		{
+			if (!response)
+			{
+				hasTextdrawOpened[playerid] = true;
+				ShowOpeningTDPanel(playerid);
+
+				return 1;
+			}
+
+			if (readingTolerance[playerid] == 0)
+			{
+				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] Bye! :)");
+				readingTolerance[playerid]++;
+			}
+
+			SetTimerEx("KickThePlayer", 1000, false, "%i", playerid);
 
 			return 1;
 		}
@@ -1152,6 +1175,12 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 				if (strlen(player[playerid][pass]) == 0)
 				{
+					if (readingTolerance[playerid] == 0)
+					{
+						SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] In order to login you have to be registered. Please register a password for you account!");
+						readingTolerance[playerid]++;
+					}
+
 					ShowPlayerDialog(playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
 					//SetTimerEx("ShowPlayerDialog", 100, false "iiissss", playerid, registerDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"User registration.", ""TOMORROW_ORANGE"Please, register a strong pass for your account. (6 - 25 Chars)", "Done", "Cancel");
 					return 1;
@@ -1159,11 +1188,18 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 
 				if (strlen(player[playerid][gender]) == 0)
 				{
-					SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] This account already have a password registered, please, select your gender.");
+					if (readingTolerance[playerid] == 0)
+					{
+						SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] This account already have a password registered, please, select your gender.");
+						readingTolerance[playerid]++;
+					}
+
 					ShowPlayerDialog(playerid, genderDialog, DIALOG_STYLE_LIST, ""TOMORROW_ORANGE"Select your gender.", ""DRACULA_PINK"Female\n"DRACULA_CYAN"Male\n"TOMORROW_WHITE"Other", "Select", "");
 					return 1;
 				}
 			}
+
+			readingTolerance[playerid] = 0;
 
 			//SendClientMessage(playerid, HEX_TOMORROW_ORANGE, "[Server » You] You are already a registered member, please login.");
 			ShowPlayerDialog(playerid, loginDialog, DIALOG_STYLE_PASSWORD, ""TOMORROW_GREEN"Login area.", ""TOMORROW_YELLOW"It looks like you're already a registered member, enter your account password to login.", "Login", "Cancel");
@@ -1217,9 +1253,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 			hasTextdrawOpened[playerid] = false;
 			CloseOpeningTDPanel(playerid);
 
-			SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] Bye! :)");
-
-			SetTimerEx("KickThePlayer", 1000, false, "%i", playerid);
+			ShowPlayerDialog(playerid, exitBtnDialog, DIALOG_STYLE_MSGBOX, ""TOMORROW_YELLOW"Exit game.", ""TOMORROW_ORANGE"Are you sure that you want to exit from the game?", "Yes", "No");
 
 			return 1;
 		}

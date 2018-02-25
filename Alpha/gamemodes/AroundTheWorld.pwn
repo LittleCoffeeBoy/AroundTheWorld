@@ -15,15 +15,16 @@ enum(<<=1)
 
 flags:createroute(cmdOwner);
 */
-/* --------- Core Modules --------- */
-#include <server/core/s_core>
-#include <player/core/p_core>
 
 #if defined MAX_PLAYERS
 	#undef MAX_PLAYERS
 #endif
 
 #define MAX_PLAYERS 5
+
+/* --------- Core Modules --------- */
+#include <server/core/s_core>
+#include <player/core/p_core>
 
 main()
 {
@@ -1142,6 +1143,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return 1;
 			}
 
+			RoutesInformationID[playerid] = listitem;
+
 			new msgSelectedRoute[1053];
 
 			format(msgSelectedRoute, sizeof(msgSelectedRoute), "\
@@ -1183,6 +1186,19 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			*/
 
 			ShowPlayerDialog(playerid, cofirmRouteDialog, DIALOG_STYLE_MSGBOX, ""TOMORROW_GREEN"Route confirmation.", msgSelectedRoute, "Select", "Cancel");
+
+			return 1;
+		}
+
+		case cofirmRouteDialog:
+		{
+			if (!response)
+			{
+				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] No delivery selected.");
+				return 1;
+			}
+
+			SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Delivery selected.");
 
 			return 1;
 		}

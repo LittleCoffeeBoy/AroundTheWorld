@@ -108,6 +108,8 @@ enum RoutesInfo
 
 new RoutesInformation[MAX_PLAYERS][10][RoutesInfo];
 
+new RoutesInformationID[MAX_PLAYERS];
+
 new serverVersion[10];
 new serverBuildnumber[10];
 

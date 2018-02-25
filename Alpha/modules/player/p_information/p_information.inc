@@ -13,7 +13,8 @@ enum PlayerInfo {
 	bool:isChatLocked,
 	adminLevel,
 	staffTag[6],
-	money
+	money,
+	bool:isWorking
 };
 
 new player[MAX_PLAYERS][PlayerInfo];

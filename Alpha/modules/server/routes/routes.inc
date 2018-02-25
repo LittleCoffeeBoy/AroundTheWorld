@@ -74,50 +74,57 @@ public CreateRoute(playerid, truck, trailer, averageDeliveryTime[], companyName[
 
 public SearchRoutes(playerid)
 {
-	
 	new dbQuery[56], DBResult:dbResult;
 	format(dbQuery, sizeof(dbQuery), "SELECT * FROM routes ORDER BY rRewardCash DESC LIMIT 10");
 	dbResult = db_query(sdbConnection, dbQuery);
 
 	new i = 0;
 
-	do
+	if (db_num_rows(dbResult) >= 1)
 	{
-		// For int fields:
-		RoutesInformation[playerid][i][iTruck] = db_get_field_int(dbResult, 1);
-		RoutesInformation[playerid][i][iTrailer] = db_get_field_int(dbResult, 2);
-		RoutesInformation[playerid][i][iLoadValue] = db_get_field_int(dbResult, 7);
-		RoutesInformation[playerid][i][iLoadType] = db_get_field_int(dbResult, 8);
-		RoutesInformation[playerid][i][iRewardCash] = db_get_field_int(dbResult, 17);
-		//printf("%i", RoutesInformation[playerid][i][iTruck]);
+		do
+		{
+			// For int fields:
+			RoutesInformation[playerid][i][iTruck] = db_get_field_int(dbResult, 1);
+			RoutesInformation[playerid][i][iTrailer] = db_get_field_int(dbResult, 2);
+			RoutesInformation[playerid][i][iLoadValue] = db_get_field_int(dbResult, 7);
+			RoutesInformation[playerid][i][iLoadType] = db_get_field_int(dbResult, 8);
+			RoutesInformation[playerid][i][iRewardCash] = db_get_field_int(dbResult, 17);
+			//printf("%i", RoutesInformation[playerid][i][iTruck]);
 
-		// For string fields:
-		db_get_field(dbResult, 3, RoutesInformation[playerid][i][iAverageDeliveryTime], 37);
-		db_get_field(dbResult, 4, RoutesInformation[playerid][i][iCompanyName], 26);
-		db_get_field(dbResult, 5, RoutesInformation[playerid][i][iCompanyOwner], 25);
-		db_get_field(dbResult, 6, RoutesInformation[playerid][i][iWhatWillBeDelivered], 21);
-		db_get_field(dbResult, 9, RoutesInformation[playerid][i][iFrom], 31);
-		db_get_field(dbResult, 13, RoutesInformation[playerid][i][iTo], 31);
-		//printf("%s", RoutesInformation[playerid][i][iAverageDeliveryTime]);
+			// For string fields:
+			db_get_field(dbResult, 3, RoutesInformation[playerid][i][iAverageDeliveryTime], 37);
+			db_get_field(dbResult, 4, RoutesInformation[playerid][i][iCompanyName], 26);
+			db_get_field(dbResult, 5, RoutesInformation[playerid][i][iCompanyOwner], 25);
+			db_get_field(dbResult, 6, RoutesInformation[playerid][i][iWhatWillBeDelivered], 21);
+			db_get_field(dbResult, 9, RoutesInformation[playerid][i][iFrom], 31);
+			db_get_field(dbResult, 13, RoutesInformation[playerid][i][iTo], 31);
+			//printf("%s", RoutesInformation[playerid][i][iAverageDeliveryTime]);
 
-		// For float fields:
-		RoutesInformation[playerid][i][iPosFromX] = db_get_field_float(dbResult, 10);
-		RoutesInformation[playerid][i][iPosFromY] = db_get_field_float(dbResult, 11);
-		RoutesInformation[playerid][i][iPosFromZ] = db_get_field_float(dbResult, 12);
-		RoutesInformation[playerid][i][iPosToX] = db_get_field_float(dbResult, 14);
-		RoutesInformation[playerid][i][iPosToY] = db_get_field_float(dbResult, 15);
-		RoutesInformation[playerid][i][iPosToZ] = db_get_field_float(dbResult, 16);
-		//printf("%f", RoutesInformation[playerid][i][iPosFromX]);
+			// For float fields:
+			RoutesInformation[playerid][i][iPosFromX] = db_get_field_float(dbResult, 10);
+			RoutesInformation[playerid][i][iPosFromY] = db_get_field_float(dbResult, 11);
+			RoutesInformation[playerid][i][iPosFromZ] = db_get_field_float(dbResult, 12);
+			RoutesInformation[playerid][i][iPosToX] = db_get_field_float(dbResult, 14);
+			RoutesInformation[playerid][i][iPosToY] = db_get_field_float(dbResult, 15);
+			RoutesInformation[playerid][i][iPosToZ] = db_get_field_float(dbResult, 16);
+			//printf("%f", RoutesInformation[playerid][i][iPosFromX]);
 
-		i++;
+			i++;
+		}
+		while (db_next_row(dbResult));
 	}
-	while(db_next_row(dbResult));
+	else
+	{
+		SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] There is no routes available.");
+		return 1;
+	}
 
 	//printf("Quantidade de rotas encontradas para o jogador %s: %i", player[playerid][pName], i-1);
 
 	db_free_result(dbResult);
 
-	new strRoutes[1076], strHeaderRoutesFormat[91], strRoutesFormat[151];
+	new strRoutes[2720], strHeaderRoutesFormat[120], strRoutesFormat[152];
 
 	format(strHeaderRoutesFormat, sizeof(strHeaderRoutesFormat), ""TOMORROW_WHITE"Truck\t "TOMORROW_GRAY"From\t "TOMORROW_GRAY"To\t "TOMORROW_GREEN"Reward");
 	strins(strRoutes, strHeaderRoutesFormat, 0);
@@ -138,7 +145,7 @@ public SearchRoutes(playerid)
 
 	//printf("Quantidade de rotas adicionandas para o jogador %s: %i", player[playerid][pName], j-1);
 	
-	ShowPlayerDialog(playerid, routesDialog, DIALOG_STYLE_TABLIST_HEADERS, ""TOMORROW_GREEN"Server Routes", strRoutes, "Select", "Cancel");
+	ShowPlayerDialog(playerid, routesDialog, DIALOG_STYLE_TABLIST_HEADERS, ""TOMORROW_GREEN"Server Routes", strRoutes, "See Inf.", "Cancel");
 
 	return 1;
 }

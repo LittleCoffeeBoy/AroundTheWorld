@@ -34,7 +34,8 @@ cmd:routes(playerid, params[])
 {
 	if (strlen(params) != 0)
 	{
-		SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] Usage: (/routes), (/sroutes), (/searchroutes).");
+		//SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] Usage: (/routes), (/sroutes), (/searchroutes).");
+		SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] Usage: (/routes).");
 		
 		return 0;
 	}

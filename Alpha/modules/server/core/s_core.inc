@@ -30,7 +30,8 @@ enum
 	createRoute9, // Define the positions for the place of departure.
 	createRoute10, // Define the name of the delivery place.
 	createRoute11, // Define the positions for the delivery place.
-	routesDialog
+	routesDialog,
+	cofirmRouteDialog
 };
 
 enum

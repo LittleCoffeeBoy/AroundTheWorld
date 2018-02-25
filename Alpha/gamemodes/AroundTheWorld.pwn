@@ -1137,6 +1137,53 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		case routesDialog:
 		{
+			if (!response)
+			{
+				return 1;
+			}
+
+			new msgSelectedRoute[1053];
+
+			format(msgSelectedRoute, sizeof(msgSelectedRoute), "\
+				"TOMORROW_WHITE"Company name: "TOMORROW_GRAY"%s\n\
+				"TOMORROW_WHITE"Company owner: "TOMORROW_BLUE"%s\n\n\
+				"TOMORROW_WHITE"What will be delivered: "TOMORROW_GREEN"%s\n\
+				"TOMORROW_WHITE"Average delivery time: "TOMORROW_GRAY"%s\n\
+				"TOMORROW_WHITE"Truck: "TOMORROW_GRAY"%i\n\
+				"TOMORROW_WHITE"Trailer: "TOMORROW_GRAY"%i\n\n\
+				"TOMORROW_WHITE"From: "TOMORROW_GRAY"%s\n\
+				"TOMORROW_WHITE"To: "TOMORROW_GRAY"%s\n\n\
+				"TOMORROW_WHITE"Load type: "TOMORROW_ORANGE"%i\n\n\
+				"TOMORROW_WHITE"Load value: "TOMORROW_GREEN"$%i\n\n\
+				"TOMORROW_WHITE"Reward in Cash: "TOMORROW_GREEN"$%i",
+				RoutesInformation[playerid][listitem][iCompanyName],
+				RoutesInformation[playerid][listitem][iCompanyOwner],
+				RoutesInformation[playerid][listitem][iWhatWillBeDelivered],
+				RoutesInformation[playerid][listitem][iAverageDeliveryTime],
+				RoutesInformation[playerid][listitem][iTruck],
+				RoutesInformation[playerid][listitem][iTrailer],
+				RoutesInformation[playerid][listitem][iFrom],
+				RoutesInformation[playerid][listitem][iTo],
+				RoutesInformation[playerid][listitem][iLoadType],
+				RoutesInformation[playerid][listitem][iLoadValue],
+				RoutesInformation[playerid][listitem][iRewardCash]);
+
+			/*
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iCompanyName]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iCompanyOwner]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iWhatWillBeDelivered]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iAverageDeliveryTime]);
+			SendClientMessage(playerid, -1, GetTruckName(RoutesInformation[playerid][listitem][iTruck]));
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iTrailer]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iFrom]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iTo]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iLoadType]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iLoadValue]);
+			SendClientMessage(playerid, -1, RoutesInformation[playerid][listitem][iRewardCash]);
+			*/
+
+			ShowPlayerDialog(playerid, cofirmRouteDialog, DIALOG_STYLE_MSGBOX, ""TOMORROW_GREEN"Route confirmation.", msgSelectedRoute, "Select", "Cancel");
+
 			return 1;
 		}
 
@@ -1149,7 +1196,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 public OnPlayerSpawn(playerid)
 {
 	player[playerid][isChatLocked] = false;
-	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Chat enabled.");
+	SendClientMessage(playerid, HEX_TOMORROW_BLUE, "[Server » You] Chat enabled.");
 	
 	return 1;
 }
@@ -1273,4 +1320,19 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 	}
 
 	return 0;
+}
+
+// SetPlayerCheckpoint(playerid, posX, posY, posZ, size);
+// DisablePlayerCheckpoint(playerid);
+// if -> IsPlayerInCheckpoint(playerid) ...
+public OnPlayerEnterCheckpoint(playerid)
+{
+
+	return 1;
+}
+
+public OnPlayerLeaveCheckpoint(playerid)
+{
+
+	return 1;
 }

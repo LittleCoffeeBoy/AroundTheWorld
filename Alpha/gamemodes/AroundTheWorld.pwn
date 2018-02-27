@@ -5,6 +5,7 @@
 #include <natives/sscanf2>
 #include <natives/bcrypt>
 #include <natives/fixes2>
+
 /*
 enum(<<=1)
 {
@@ -21,6 +22,8 @@ flags:createroute(cmdOwner);
 #endif
 
 #define MAX_PLAYERS 5
+
+forward OpenVI(playerid, vehicleid);
 
 /* --------- Core Modules --------- */
 #include <server/core/s_core>
@@ -275,6 +278,12 @@ public OnPlayerConnect(playerid)
 	#endif
 
 	// Hook (3)
+	// Set vehicle interface.
+	#if defined SetVI_OnPlayerConnect
+		SetVI_OnPlayerConnect(playerid);
+	#endif
+
+	// Hook (4)
 	// Verify player information.
 	#if defined VPI_OnPlayerConnect
 		VPI_OnPlayerConnect(playerid);
@@ -316,8 +325,24 @@ public OnPlayerConnect(playerid)
 //------------------------------
 
 //------------------------------
-// Hooking: VPI_OnPlayerConnect
+// Hooking: SetVI_OnPlayerConnect
 // Hook (3)
+#if defined _ALS_OnPlayerConnect
+	#undef OnPlayerConnect
+#else
+	#define _ALS_OnPlayerConnect
+#endif
+
+#define OnPlayerConnect SetVI_OnPlayerConnect
+
+#if defined SetVI_OnPlayerConnect
+	forward SetVI_OnPlayerConnect(playerid);
+#endif
+//------------------------------
+
+//------------------------------
+// Hooking: VPI_OnPlayerConnect
+// Hook (4)
 #if defined _ALS_OnPlayerConnect
 	#undef OnPlayerConnect
 #else
@@ -333,8 +358,16 @@ public OnPlayerConnect(playerid)
 
 public OnPlayerDisconnect(playerid, reason)
 {
+	// Hook (1)
+	// Save player information.
 	#if defined SPI_OnPlayerDisconnect
 		SPI_OnPlayerDisconnect(playerid, reason);
+	#endif
+
+	// Hook (2)
+	// Destroy vehicle interface.
+	#if defined DestroyVI_OnPlayerDisconnect
+		DestroyVI_OnPlayerDisconnect(playerid, reason);
 	#endif
 
 	return 1;
@@ -353,6 +386,22 @@ public OnPlayerDisconnect(playerid, reason)
 
 #if defined SPI_OnPlayerDisconnect
 	forward SPI_OnPlayerDisconnect(playerid, reason);
+#endif
+//------------------------------
+
+//------------------------------
+// Hooking: DestroyVI_OnPlayerDisconnect
+// Hook (2)
+#if defined _ALS_OnPlayerDisconnect
+	#undef OnPlayerDisconnect
+#else
+	#define _ALS_OnPlayerDisconnect
+#endif
+
+#define OnPlayerDisconnect DestroyVI_OnPlayerDisconnect
+
+#if defined DestroyVI_OnPlayerDisconnect
+	forward DestroyVI_OnPlayerDisconnect(playerid, reason);
 #endif
 //------------------------------
 
@@ -1143,6 +1192,12 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return 1;
 			}
 
+			if (player[playerid][isWorking])
+			{
+				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] You're already working.");
+				return 1;
+			}
+
 			RoutesInformationID[playerid] = listitem;
 
 			new msgSelectedRoute[1053];
@@ -1194,11 +1249,29 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 			if (!response)
 			{
-				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] No delivery selected.");
+				SendClientMessage(playerid, HEX_TOMORROW_YELLOW, "[Server » You] Delivery not selected.");
+				RoutesInformationID[playerid] = -1;
+
 				return 1;
 			}
 
-			SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Delivery selected.");
+			if (RoutesInformationID != -1)
+			{
+				player[playerid][isTruckLoaded] = false;
+				player[playerid][isWorking] = true;
+
+				// Maybe later, when the player accept the delivery, it must go to the enterprise, load the truck {cut scene loading the truck, like russians servers} and them unload the truck.
+
+				SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
+
+				new msgConfirmedRoutes[128];
+				format(msgConfirmedRoutes, sizeof(msgConfirmedRoutes), "[Server » You] Deliver: %s, From: %s, To: %s.", RoutesInformation[playerid][listitem][iWhatWillBeDelivered], RoutesInformation[playerid][listitem][iFrom], RoutesInformation[playerid][listitem][iTo]);
+				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, msgConfirmedRoutes);
+			}
+
+			//SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Delivery selected.");
+
+			//SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
 
 			return 1;
 		}
@@ -1343,12 +1416,101 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
 // if -> IsPlayerInCheckpoint(playerid) ...
 public OnPlayerEnterCheckpoint(playerid)
 {
+	if (player[playerid][isWorking])
+	{
+		if (!player[playerid][isTruckLoaded])
+		{
+			// If the truck is not loaded, load it.
+			//SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
+			if (IsPlayerInRange(playerid, 5.0, 0.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ]))
+			{
+				// Load the truck.
+			}
+		}
+		else
+		{
+			// If the truck is already loaded, unload it.
+			if (IsPlayerInRange(playerid, 5.0, 0.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToZ]))
+			{
+				// Unload the truck.
+			}
+		}
+
+		return 1;
+	}
 
 	return 1;
 }
 
 public OnPlayerLeaveCheckpoint(playerid)
 {
+
+	return 1;
+}
+
+public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
+{
+	if (!ispassenger)
+	{
+		// Verificar depois se, não é uma bicicleta por exemplo.
+		isVIOpen[playerid] = true;
+
+		SetTimerEx("OpenVI", 3000, false, "ii", playerid, vehicleid);
+	}
+
+	return 1;
+}
+
+public OpenVI(playerid, vehicleid)
+{
+	if (isVIOpen)
+	{
+		PlayerTextDrawSetPreviewModel(playerid, boxVehicleImage[playerid], GetVehicleModel(vehicleid));
+
+		viTimers[playerid] = SetTimerEx("UpdateVI", 100, true, "ii", playerid, vehicleid);
+
+		PlayerTextDrawShow(playerid, boxInterfaceDesign1[playerid]);
+		PlayerTextDrawShow(playerid, boxDeliveryInterface2[playerid]);
+
+		PlayerTextDrawShow(playerid, boxVehicleImage[playerid]);
+		PlayerTextDrawShow(playerid, textVehicleName[playerid]);
+
+		PlayerTextDrawShow(playerid, textVehicleSpeed[playerid]);
+		PlayerTextDrawShow(playerid, labelVehicleSpeed[playerid]);
+		
+		PlayerTextDrawShow(playerid, textVehicleCondition[playerid]);
+		PlayerTextDrawShow(playerid, labelVehicleCondition[playerid]);
+
+		PlayerTextDrawShow(playerid, textVehicleFuel[playerid]);
+		PlayerTextDrawShow(playerid, labelVehicleFuel[playerid]);
+	}
+	
+	return 1;
+}
+
+public OnPlayerExitVehicle(playerid, vehicleid)
+{
+	if (isVIOpen[playerid])
+	{
+		isVIOpen[playerid] = false;
+
+		KillTimer(viTimers[playerid]);
+
+		PlayerTextDrawHide(playerid, boxInterfaceDesign1[playerid]);
+		PlayerTextDrawHide(playerid, boxDeliveryInterface2[playerid]);
+
+		PlayerTextDrawHide(playerid, boxVehicleImage[playerid]);
+		PlayerTextDrawHide(playerid, textVehicleName[playerid]);
+
+		PlayerTextDrawHide(playerid, textVehicleSpeed[playerid]);
+		PlayerTextDrawHide(playerid, labelVehicleSpeed[playerid]);
+		
+		PlayerTextDrawHide(playerid, textVehicleCondition[playerid]);
+		PlayerTextDrawHide(playerid, labelVehicleCondition[playerid]);
+
+		PlayerTextDrawHide(playerid, textVehicleFuel[playerid]);
+		PlayerTextDrawHide(playerid, labelVehicleFuel[playerid]);
+	}
 
 	return 1;
 }

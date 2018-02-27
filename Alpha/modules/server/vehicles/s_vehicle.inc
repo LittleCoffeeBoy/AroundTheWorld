@@ -24,3 +24,15 @@ public CV_OnGameModeInit()
 	
 	return 1;
 }
+
+// Bug quando cai da moto não fecha o painel do vehiculo.
+stock GetVehicleSpeed(vehicleid)
+{
+	new Float:vehiclePosX, Float:vehiclePosY, Float:vehiclePosZ;
+
+	GetVehicleVelocity(vehicleid, vehiclePosX, vehiclePosY, vehiclePosZ);
+
+	//printf("%i", floatround(floatsqroot((vehiclePosX * vehiclePosX) + (vehiclePosY * vehiclePosY) + (vehiclePosZ * vehiclePosZ)) * 181.5));
+
+	return floatround(floatsqroot((vehiclePosX * vehiclePosX) + (vehiclePosY * vehiclePosY) + (vehiclePosZ * vehiclePosZ)) * 181.5);
+}

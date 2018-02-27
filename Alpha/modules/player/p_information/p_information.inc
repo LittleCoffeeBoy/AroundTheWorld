@@ -15,6 +15,7 @@ enum PlayerInfo {
 	staffTag[6],
 	money,
 	bool:isWorking
+	bool:isTruckLoaded
 };
 
 new player[MAX_PLAYERS][PlayerInfo];

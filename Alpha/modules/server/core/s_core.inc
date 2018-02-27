@@ -132,6 +132,32 @@ new Text:tdPanelTitle3;
 new Text:tdPanelTitle4;
 new Text:tdPanelTitle5;
 
+// Textdraws for the vehicle interface.
+new PlayerText:boxInterfaceDesign1[MAX_PLAYERS];
+new PlayerText:boxDeliveryInterface1[MAX_PLAYERS];
+new PlayerText:boxDeliveryInterface2[MAX_PLAYERS];
+new PlayerText:boxVehicleImage[MAX_PLAYERS];
+new PlayerText:textVehicleName[MAX_PLAYERS];
+new PlayerText:textVehicleSpeed[MAX_PLAYERS];
+new PlayerText:labelVehicleSpeed[MAX_PLAYERS];
+new PlayerText:textVehicleCondition[MAX_PLAYERS];
+new PlayerText:labelVehicleCondition[MAX_PLAYERS];
+new PlayerText:textVehicleFuel[MAX_PLAYERS];
+new PlayerText:labelVehicleFuel[MAX_PLAYERS];
+new PlayerText:textLoadInfo[MAX_PLAYERS];
+new PlayerText:labelLoadInfo[MAX_PLAYERS];
+new PlayerText:textFrom[MAX_PLAYERS];
+new PlayerText:labelFrom[MAX_PLAYERS];
+new PlayerText:textTo[MAX_PLAYERS];
+new PlayerText:labelTo[MAX_PLAYERS];
+new PlayerText:textVehicleLoaded[MAX_PLAYERS];
+new PlayerText:labelVehicleLoaded[MAX_PLAYERS];
+new PlayerText:textReward[MAX_PLAYERS];
+new PlayerText:labelReward[MAX_PLAYERS];
+
+new isVIOpen[MAX_PLAYERS];
+new viTimers[MAX_PLAYERS];
+
 // SetDO: SetDefaultOptions
 public SetDO_OnGameModeInit()
 {

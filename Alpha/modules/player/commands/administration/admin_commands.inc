@@ -22,3 +22,38 @@ cmd:createroute(playerid, params[])
 
 	return 1;
 }
+
+cmd:vehicle(playerid, params[]) {
+	//if(player[playerid][adminLevel] < 1) return SendClientMessage(playerid, HEX_DRACULA_RED, "[Server » You] Unknown command.");
+
+	new targetId, vehicleIdCache, vehicleColor1, vehicleColor2;
+
+	if(sscanf(params, "uiii", targetId, vehicleIdCache, vehicleColor1, vehicleColor2)) return SendClientMessage(playerid, HEX_DRACULA_ORANGE, "[Server » You] Usage: /vehicle <target_id> <vehicle_id> <color> <color>");//<(true/false)put_player_in_vehicle>
+	if(!IsPlayerConnected(targetId)) return SendClientMessage(playerid, HEX_DRACULA_RED, "[Server » You] Player not connected!");
+	if(vehicleIdCache < 400 ||  vehicleIdCache > 611) return SendClientMessage(playerid, HEX_DRACULA_RED, "[Server » You] Invalid Vehicle ID. Available vehicles id (400 - 611)!");
+	if((vehicleColor1 < 0 || vehicleColor1 > 255) || (vehicleColor2 < 0 || vehicleColor2 > 255)) return SendClientMessage(playerid, HEX_DRACULA_RED, "[Server » You] Invalid colors. Available vehicle colors (000 - 255)!");
+
+	new Float:playerPosX, Float:playerPosY, Float:playerPosZ, Float:playerAngle, distanceFromPlayer;
+
+	distanceFromPlayer = 8;
+
+	GetPlayerPos(targetId, playerPosX, playerPosY, playerPosZ);
+	GetPlayerFacingAngle(targetId, playerAngle);
+
+	new Float:vehicleX, Float:vehicleY;
+
+	vehicleX = distanceFromPlayer * floatcos(playerAngle + 90, degrees) + playerPosX;
+	vehicleY = distanceFromPlayer * floatsin(playerAngle + 90, degrees) + playerPosY;
+
+	CreateVehicle(vehicleIdCache, vehicleX, vehicleY, playerPosZ, playerAngle, vehicleColor1, vehicleColor2, -1);
+
+	if(playerid == targetId) {
+		SendClientMessage(playerid, HEX_DRACULA_GREEN, "[Server » You] You created a vehicle.");
+	} else {
+		new msg[86];
+		format(msg, sizeof(msg), "[Server » You] You received a vehicle from %s (Staff Member).", player[playerid][pName]);
+		SendClientMessage(targetId, HEX_DRACULA_GREEN, msg);
+	}
+
+	return 1;
+}

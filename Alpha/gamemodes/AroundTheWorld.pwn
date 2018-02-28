@@ -24,6 +24,12 @@ flags:createroute(cmdOwner);
 #define MAX_PLAYERS 5
 
 forward OpenVI(playerid, vehicleid);
+forward LoadPlayerTruckWithTrailer(playerid);
+forward LoadPlayerTruckWithoutTrailer(playerid);
+forward UnloadPlayerTruckWithTrailer(playerid);
+forward UnloadPlayerTruckWithoutTrailer(playerid);
+forward FreezeThePlayer(playerid, freeze);
+forward GiveMoneyToAPlayer(playerid, ammountMoney);
 
 /* --------- Core Modules --------- */
 #include <server/core/s_core>
@@ -1255,18 +1261,33 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return 1;
 			}
 
-			if (RoutesInformationID != -1)
+			// It will always be -1... Fix this
+			if (RoutesInformationID[playerid] != -1)
 			{
-				player[playerid][isTruckLoaded] = false;
-				player[playerid][isWorking] = true;
+				if (IsPlayerInAnyVehicle(playerid))
+				{
+					if (GetVehicleModel(GetPlayerVehicleID(playerid)) == RoutesInformation[playerid][RoutesInformationID[playerid]][iTruck])
+					{
+						player[playerid][isTruckLoaded] = false;
+						player[playerid][isWorking] = true;
 
-				// Maybe later, when the player accept the delivery, it must go to the enterprise, load the truck {cut scene loading the truck, like russians servers} and them unload the truck.
+						// Maybe later, when the player accept the delivery, it must go to the enterprise, load the truck {cut scene loading the truck, like russians servers} and them unload the truck.
 
-				SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
+						SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
 
-				new msgConfirmedRoutes[128];
-				format(msgConfirmedRoutes, sizeof(msgConfirmedRoutes), "[Server » You] Deliver: %s, From: %s, To: %s.", RoutesInformation[playerid][listitem][iWhatWillBeDelivered], RoutesInformation[playerid][listitem][iFrom], RoutesInformation[playerid][listitem][iTo]);
-				SendClientMessage(playerid, HEX_TOMORROW_ORANGE, msgConfirmedRoutes);
+						new msgConfirmedRoutes[128];
+						format(msgConfirmedRoutes, sizeof(msgConfirmedRoutes), "[Server » You] Deliver: %s, From: %s, To: %s.", RoutesInformation[playerid][listitem][iWhatWillBeDelivered], RoutesInformation[playerid][listitem][iFrom], RoutesInformation[playerid][listitem][iTo]);
+						SendClientMessage(playerid, HEX_TOMORROW_ORANGE, msgConfirmedRoutes);
+					}
+					else
+					{
+						SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] You have to be driving the required truck.");
+					}
+				}
+				else
+				{
+					SendClientMessage(playerid, HEX_TOMORROW_RED, "[Server » You] You have to be driving the required truck.");
+				}
 			}
 
 			//SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Delivery selected.");
@@ -1418,21 +1439,54 @@ public OnPlayerEnterCheckpoint(playerid)
 {
 	if (player[playerid][isWorking])
 	{
+		new pVehicleId = GetPlayerVehicleID(playerid);
+		new pTrailer = GetVehicleTrailer(pVehicleId);
+		new pVehicleModel = GetVehicleModel(pVehicleId);
+
 		if (!player[playerid][isTruckLoaded])
 		{
 			// If the truck is not loaded, load it.
 			//SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ], 5);
-			if (IsPlayerInRange(playerid, 5.0, 0.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ]))
+			if (IsPlayerInRangeOfPoint(playerid, 5.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosFromZ]))
 			{
-				// Load the truck.
+				if (RoutesInformation[playerid][RoutesInformationID[playerid]][iTruck] == pVehicleModel)
+				{
+					// Load the truck.
+					if (RoutesInformation[playerid][RoutesInformationID[playerid]][iTrailer] != 0)
+					{
+						// Load the truck with a trailer.
+						if (RoutesInformation[playerid][RoutesInformationID[playerid]][iTrailer] == pTrailer)
+						{
+							LoadPlayerTruckWithTrailer(playerid);
+						}
+					}
+					else
+					{
+						// Load the truck without a trailer.
+						LoadPlayerTruckWithoutTrailer(playerid);
+					}
+				}
 			}
 		}
 		else
 		{
 			// If the truck is already loaded, unload it.
-			if (IsPlayerInRange(playerid, 5.0, 0.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToZ]))
+			if (IsPlayerInRangeOfPoint(playerid, 5.0, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToZ]))
 			{
 				// Unload the truck.
+				if (RoutesInformation[playerid][RoutesInformationID[playerid]][iTrailer] != 0)
+				{
+					// Unload the truck with a trailer.
+					if (RoutesInformation[playerid][RoutesInformationID[playerid]][iTrailer] == pTrailer)
+					{
+						UnloadPlayerTruckWithTrailer(playerid);
+					}
+				}
+				else
+				{
+					// Unload the truck without a trailer.
+					UnloadPlayerTruckWithoutTrailer(playerid);
+				}
 			}
 		}
 
@@ -1445,6 +1499,109 @@ public OnPlayerEnterCheckpoint(playerid)
 public OnPlayerLeaveCheckpoint(playerid)
 {
 
+	return 1;
+}
+
+public LoadPlayerTruckWithTrailer(playerid)
+{
+	FreezeThePlayer(playerid, 1);
+	GameTextForPlayer(playerid, "~g~Loading your trailer...", 5000, 4);
+	SetTimerEx("FreezeThePlayer", 5100, false, "ii", playerid, 0);
+
+	player[playerid][isTruckLoaded] = true;
+
+	SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToZ], 5);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Trailer loaded.");
+
+	new msgTrailerLoaded[65];
+	format(msgTrailerLoaded, sizeof(msgTrailerLoaded), "[Server » You] Delivery place: %s.", RoutesInformation[playerid][RoutesInformationID[playerid]][iTo]);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, msgTrailerLoaded);
+
+	return 1;
+}
+
+public LoadPlayerTruckWithoutTrailer(playerid)
+{
+	FreezeThePlayer(playerid, 1);
+	GameTextForPlayer(playerid, "~g~Loading your truck...", 5000, 4);
+	SetTimerEx("FreezeThePlayer", 5100, false, "ii", playerid, 0);
+
+	player[playerid][isTruckLoaded] = true;
+
+	SetPlayerCheckpoint(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToX], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToY], RoutesInformation[playerid][RoutesInformationID[playerid]][iPosToZ], 5);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Trailer loaded.");
+
+	new msgTrailerLoaded[65];
+	format(msgTrailerLoaded, sizeof(msgTrailerLoaded), "[Server » You] Delivery place: %s.", RoutesInformation[playerid][RoutesInformationID[playerid]][iTo]);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, msgTrailerLoaded);
+
+	return 1;
+}
+
+public UnloadPlayerTruckWithTrailer(playerid)
+{
+	FreezeThePlayer(playerid, 1);
+	GameTextForPlayer(playerid, "~g~Unloading your trailer...", 5000, 4);
+	SetTimerEx("FreezeThePlayer", 5100, false, "ii", playerid, 0);
+
+	player[playerid][isWorking] = false;
+	player[playerid][isTruckLoaded] = false;
+
+	DisablePlayerCheckpoint(playerid);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Truck unloaded.");
+
+	new msgTrailerUnloaded[42];
+	format(msgTrailerUnloaded, sizeof(msgTrailerUnloaded), "[Server » You] Reward: $%i.", RoutesInformation[playerid][RoutesInformationID[playerid]][iRewardCash]);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, msgTrailerUnloaded);
+
+	GiveMoneyToAPlayer(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iRewardCash]);
+
+	return 1;
+}
+
+public UnloadPlayerTruckWithoutTrailer(playerid)
+{
+	FreezeThePlayer(playerid, 1);
+	GameTextForPlayer(playerid, "~g~Unloading your truck...", 5000, 4);
+	SetTimerEx("FreezeThePlayer", 5100, false, "ii", playerid, 0);
+
+	player[playerid][isWorking] = false;
+	player[playerid][isTruckLoaded] = false;
+
+	DisablePlayerCheckpoint(playerid);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, "[Server » You] Truck unloaded.");
+
+	new msgTrailerUnloaded[42];
+	format(msgTrailerUnloaded, sizeof(msgTrailerUnloaded), "[Server » You] Reward: $%i.", RoutesInformation[playerid][RoutesInformationID[playerid]][iRewardCash]);
+
+	SendClientMessage(playerid, HEX_TOMORROW_GREEN, msgTrailerUnloaded);
+
+	GiveMoneyToAPlayer(playerid, RoutesInformation[playerid][RoutesInformationID[playerid]][iRewardCash]);
+
+	return 1;
+}
+
+public FreezeThePlayer(playerid, freeze)
+{
+	TogglePlayerControllable(playerid, freeze);
+	return 1;
+}
+
+public GiveMoneyToAPlayer(playerid, ammountMoney)
+{
+	player[playerid][money] += ammountMoney;
+
+	ResetPlayerMoney(playerid);
+
+	GivePlayerMoney(playerid, player[playerid][money]);
+	
 	return 1;
 }
 
@@ -1463,7 +1620,7 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
 
 public OpenVI(playerid, vehicleid)
 {
-	if (isVIOpen)
+	if (isVIOpen[playerid])
 	{
 		PlayerTextDrawSetPreviewModel(playerid, boxVehicleImage[playerid], GetVehicleModel(vehicleid));
 

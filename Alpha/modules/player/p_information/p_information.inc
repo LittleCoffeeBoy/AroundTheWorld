@@ -14,7 +14,7 @@ enum PlayerInfo {
 	adminLevel,
 	staffTag[6],
 	money,
-	bool:isWorking
+	bool:isWorking,
 	bool:isTruckLoaded
 };
 
